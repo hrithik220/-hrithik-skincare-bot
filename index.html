@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hrithik Skincare Bot</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff6b9d 0%, #ffd93d 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 60px 20px 40px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-bottom: 3px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .hero h1 {
+            color: white;
+            font-size: 4em;
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            animation: fadeInDown 1s ease;
+        }
+
+        .hero p {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 1.4em;
+            animation: fadeInUp 1s ease;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .selector-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            margin-bottom: 40px;
+            animation: slideIn 0.8s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .selector-section h2 {
+            color: #ff6b9d;
+            font-size: 2em;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .skin-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .skin-option {
+            padding: 20px;
+            background: linear-gradient(135deg, #ff6b9d 0%, #ffd93d 100%);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 107, 157, 0.3);
+        }
+
+        .skin-option:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255, 107, 157, 0.5);
+        }
+
+        .skin-option.active {
+            background: linear-gradient(135deg, #ffd93d 0%, #ff6b9d 100%);
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(255, 107, 157, 0.6);
+        }
+
+        .results-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            display: none;
+            animation: fadeIn 0.6s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .results-section.show {
+            display: block;
+        }
+
+        .results-section h2 {
+            color: #ff6b9d;
+            font-size: 2.2em;
+            margin-bottom: 30px;
+            text-align: center;
+            border-bottom: 3px solid #ffd93d;
+            padding-bottom: 15px;
+        }
+
+        .routine-section {
+            margin-bottom: 30px;
+        }
+
+        .routine-section h3 {
+            color: #ff6b9d;
+            margin-bottom: 20px;
+            font-size: 1.6em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .routine-section h3::before {
+            content: '✨';
+            font-size: 1.3em;
+        }
+
+        .routine-list {
+            background: linear-gradient(135deg, #fff0f6 0%, #fffbea 100%);
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 5px solid #ff6b9d;
+        }
+
+        .routine-list ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .routine-list li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+            font-size: 1.1em;
+        }
+
+        .routine-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: #ff6b9d;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .food-section {
+            background: linear-gradient(135deg, #ffd93d 0%, #ffed4e 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 30px;
+            box-shadow: 0 5px 20px rgba(255, 217, 61, 0.4);
+        }
+
+        .food-section h3 {
+            color: #ff6b9d;
+            margin-bottom: 20px;
+            font-size: 1.6em;
+        }
+
+        .food-section h3::before {
+            content: '🥗 ';
+        }
+
+        .food-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .food-tag {
+            background: white;
+            padding: 10px 18px;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: 500;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+            color: #ff6b9d;
+            transition: all 0.3s ease;
+        }
+
+        .food-tag:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.25);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: white;
+            font-size: 1.5em;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            margin-top: 50px;
+        }
+
+        .footer span {
+            background: linear-gradient(135deg, #ffffff 0%, #ffe8f0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 1.3em;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5em;
+            }
+            
+            .skin-options {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <h1>🌸 Hrithik Skincare Bot 🌸</h1>
+        <p>Your Personal Skincare Guide</p>
+    </div>
+
+    <div class="container">
+        <div class="selector-section">
+            <h2>Select Your Skin Type</h2>
+            <div class="skin-options">
+                <button class="skin-option" data-skin="normal">Normal Skin</button>
+                <button class="skin-option" data-skin="oily">Oily Skin</button>
+                <button class="skin-option" data-skin="dry">Dry Skin</button>
+                <button class="skin-option" data-skin="combination">Combination Skin</button>
+                <button class="skin-option" data-skin="sensitive">Sensitive Skin</button>
+            </div>
+        </div>
+
+        <div class="results-section" id="results">
+            <h2 id="skinTypeName"></h2>
+            
+            <div class="routine-section">
+                <h3>Morning Routine</h3>
+                <div class="routine-list">
+                    <ul id="morningRoutine"></ul>
+                </div>
+            </div>
+
+            <div class="routine-section">
+                <h3>Night Routine</h3>
+                <div class="routine-list">
+                    <ul id="nightRoutine"></ul>
+                </div>
+            </div>
+
+            <div class="food-section">
+                <h3>Best Foods for Your Skin</h3>
+                <div class="food-list" id="foodList"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <span>Hrithik Skincare Bot</span>
+        <div style="font-size: 0.7em; margin-top: 10px; opacity: 0.9;">Your Journey to Glowing Skin Starts Here</div>
+    </div>
+
+    <script>
+        const skinData = {
+            normal: {
+                name: "Normal Skin",
+                morning: [
+                    "Gentle cleanser",
+                    "Hydrating toner",
+                    "Vitamin C serum",
+                    "Lightweight moisturizer",
+                    "SPF 30+ sunscreen"
+                ],
+                night: [
+                    "Double cleanse (oil + water-based)",
+                    "Exfoliate (2-3x/week)",
+                    "Hydrating toner",
+                    "Retinol serum (3x/week)",
+                    "Night cream",
+                    "Eye cream"
+                ],
+                foods: ["Berries", "Avocado", "Nuts", "Green Tea", "Salmon", "Sweet Potato", "Tomatoes"]
+            },
+            oily: {
+                name: "Oily Skin",
+                morning: [
+                    "Foaming cleanser (salicylic acid)",
+                    "Astringent toner",
+                    "Niacinamide serum",
+                    "Oil-free gel moisturizer",
+                    "Matte SPF 50+ sunscreen"
+                ],
+                night: [
+                    "Micellar water cleanse",
+                    "Clay mask (2x/week)",
+                    "BHA exfoliant",
+                    "Oil-control toner",
+                    "Light gel serum",
+                    "Non-comedogenic night cream"
+                ],
+                foods: ["Cucumber", "Lemon Water", "Leafy Greens", "Coconut Water", "Bananas", "Oats", "Green Tea"]
+            },
+            dry: {
+                name: "Dry Skin",
+                morning: [
+                    "Cream cleanser",
+                    "Hydrating essence",
+                    "Hyaluronic acid serum",
+                    "Rich moisturizer",
+                    "Facial oil (optional)",
+                    "SPF 30+ sunscreen"
+                ],
+                night: [
+                    "Oil cleanser",
+                    "Gentle cream cleanser",
+                    "Hydrating toner",
+                    "Peptide serum",
+                    "Night cream with ceramides",
+                    "Overnight sleeping mask"
+                ],
+                foods: ["Fatty Fish", "Walnuts", "Olive Oil", "Watermelon", "Yogurt", "Eggs", "Chia Seeds"]
+            },
+            combination: {
+                name: "Combination Skin",
+                morning: [
+                    "Balanced gel cleanser",
+                    "Balancing toner",
+                    "Vitamin C serum",
+                    "Lightweight moisturizer",
+                    "Gel sunscreen on T-zone",
+                    "Cream sunscreen on dry areas"
+                ],
+                night: [
+                    "Gentle foaming cleanser",
+                    "Chemical exfoliant (AHA on dry, BHA on oily)",
+                    "Balancing toner",
+                    "Targeted serums (by zone)",
+                    "Light cream moisturizer",
+                    "Spot treatment as needed"
+                ],
+                foods: ["Almonds", "Carrots", "Spinach", "Oranges", "Broccoli", "Quinoa", "Blueberries"]
+            },
+            sensitive: {
+                name: "Sensitive Skin",
+                morning: [
+                    "Fragrance-free gentle cleanser",
+                    "Soothing toner (aloe/chamomile)",
+                    "Calming serum (centella)",
+                    "Barrier repair moisturizer",
+                    "Mineral SPF 30+ sunscreen"
+                ],
+                night: [
+                    "Micellar water (fragrance-free)",
+                    "Creamy gentle cleanser",
+                    "Calming essence",
+                    "Soothing serum (colloidal oatmeal)",
+                    "Rich barrier cream",
+                    "Avoid exfoliants (use 1x/week max)"
+                ],
+                foods: ["Turmeric", "Ginger", "Oatmeal", "Chamomile Tea", "Papaya", "Sweet Peppers", "Pumpkin Seeds"]
+            }
+        };
+
+        const buttons = document.querySelectorAll('.skin-option');
+        const resultsSection = document.getElementById('results');
+        const skinTypeName = document.getElementById('skinTypeName');
+        const morningRoutine = document.getElementById('morningRoutine');
+        const nightRoutine = document.getElementById('nightRoutine');
+        const foodList = document.getElementById('foodList');
+
+        buttons.forEach(button => {
+            button.addEventListener('click', function() {
+                buttons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                const skinType = this.getAttribute('data-skin');
+                const data = skinData[skinType];
+                
+                skinTypeName.textContent = data.name;
+                
+                morningRoutine.innerHTML = '';
+                data.morning.forEach(item => {
+                    const li = document.createElement('li');
+                    li.textContent = item;
+                    morningRoutine.appendChild(li);
+                });
+                
+                nightRoutine.innerHTML = '';
+                data.night.forEach(item => {
+                    const li = document.createElement('li');
+                    li.textContent = item;
+                    nightRoutine.appendChild(li);
+                });
+                
+                foodList.innerHTML = '';
+                data.foods.forEach(food => {
+                    const span = document.createElement('span');
+                    span.className = 'food-tag';
+                    span.textContent = food;
+                    foodList.appendChild(span);
+                });
+                
+                resultsSection.classList.add('show');
+                resultsSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            });
+        });
+    </script>
+</body>
+</html>
